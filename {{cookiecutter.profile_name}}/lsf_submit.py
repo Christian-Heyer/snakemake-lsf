@@ -155,6 +155,13 @@ class Submitter:
         return '-o "{out_log}" -e "{err_log}" -J "{jobname}"'.format(
             out_log=self.outlog, err_log=self.errlog, jobname=self.jobname
         )
+    @property
+    def walltime(self) -> str:
+        return self.cluster.get("walltime", "")
+
+    @property
+    def walltime_cmd(self) -> str:
+        return "-W {}".format(self.walltime) if self.walltime else ""
 
     @property
     def queue(self) -> str:
@@ -178,6 +185,7 @@ class Submitter:
             "bsub",
             self.resources_cmd,
             self.jobinfo_cmd,
+            self.walltime_cmd,
             self.queue_cmd,
             self.cluster_cmd,
             self.rule_specific_params,
