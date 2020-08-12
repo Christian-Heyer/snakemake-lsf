@@ -91,7 +91,7 @@ jobinfo_cmd = generate_jobinfo_command(job_properties)
 resources_cmd = generate_resources_command(job_properties)
 
 walltime = cluster.get("walltime", "")
-walltime_cmd = "-W {}".format(walltime) if walltime else "00:10"
+walltime_cmd = "-W {}".format(walltime) if walltime else ""
 
 queue = cluster.get("queue", "")
 queue_cmd = "-q {}".format(queue) if queue else ""
