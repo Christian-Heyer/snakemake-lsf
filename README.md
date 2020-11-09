@@ -1,16 +1,16 @@
 # Snakemake LSF profile
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Snakemake-Profiles/snakemake-lsf/Python_package)](https://github.com/Snakemake-Profiles/snakemake-lsf/actions)
-[![Code coverage](https://codecov.io/gh/Snakemake-Profiles/snakemake-lsf/branch/master/graph/badge.svg)](https://codecov.io/gh/Snakemake-Profiles/snakemake-lsf)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Snakemake-Profiles/lsf/Python_package)](https://github.com/Snakemake-Profiles/lsf/actions)
+[![Code coverage](https://codecov.io/gh/Snakemake-Profiles/lsf/branch/master/graph/badge.svg)](https://codecov.io/gh/Snakemake-Profiles/lsf)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![Python versions](https://img.shields.io/badge/Python%20versions->=3.5-blue)
-![License](https://img.shields.io/github/license/Snakemake-Profiles/snakemake-lsf)
+![License](https://img.shields.io/github/license/Snakemake-Profiles/lsf)
 
 [Snakemake profile][profile] for running jobs on an [LSF][lsf] cluster.
 
 [TOC]: #
 
-# Table of Contents
+## Table of Contents
 - [Install](#install)
   - [Dependencies](#dependencies)
   - [Profile](#profile)
@@ -19,7 +19,6 @@
   - [Non-standard rule-specific cluster resource settings](#non-standard-rule-specific-cluster-resource-settings)
 - [Known Issues](#known-issues)
 - [Contributing](#contributing)
-
 
 ## Install
 
@@ -46,7 +45,7 @@ Download and set up the profile on your cluster
 profile_dir="${HOME}/.config/snakemake"
 mkdir -p "$profile_dir"
 # use cookiecutter to create the profile in the config directory
-template="gh:Snakemake-Profiles/snakemake-lsf"
+template="gh:Snakemake-Profiles/lsf"
 cookiecutter --output-dir "$profile_dir" "$template"
 ```
 
@@ -76,6 +75,24 @@ to set the memory for a rule with the `resources: mem_mb` parameter, it is impor
 this profile to know whether this then needs to be converted into other units when
 submitting jobs. See [here][18] for further information.
 
+#### `UNKWN_behaviour`
+
+**Default**: `wait`  
+**Valid options**: `wait`, `kill`
+
+When LSF returns a job status of `UNKWN` do you want to wait for the host the job is
+running on to be contactable again - i.e. consider the job running - or kill it as
+outlined [here][job_kill]?
+
+#### `ZOMBI_behaviour`
+
+**Default**: `ignore`  
+**Valid options**: `ignore`, `kill`
+
+When LSF returns a job status of `ZOMBI` do you want to ignore this (not clean it up) or
+kill it as outlined [here][job_kill]? Regardless of the option chosen, the job is
+considered failed.
+
 #### `latency_wait`
 
 **Default:** `5`
@@ -103,7 +120,6 @@ From the `snakemake --help` menu
                         environment. If this flag is not set, the conda
                         directive is ignored.
 ```
-
 
 #### `use_singularity`
 
@@ -213,7 +229,6 @@ The default queue on the cluster to submit jobs to. If left unset, then the defa
 your cluster will be used.  
 The `bsub` parameter that this controls is [`-q`][bsub-q].
 
-
 #### `max_status_checks_per_second`
 
 **Default**: `10`
@@ -248,7 +263,6 @@ The name to use for this profile. The directory for the profile is created as th
 i.e. `$HOME/.config/snakemake/<profile_name>`.  
 This is also the value you pass to `snakemake --profile <profile_name>`.
 
-
 ## Usage
 
 Once set up is complete, this will allow you to run snakemake with the cluster profile
@@ -281,7 +295,6 @@ specify per-rule cluster settings is snakemake-profile-specific.
 Per-rule configuration must be placed in a file called `lsf.yaml` and **must** be
 located in the working directory for the pipeline. If you set `workdir` manually within
 your workflow, the config file has to be in there.
-
 
 ***NOTE:** these settings are only valid for this profile and are not guaranteed to be
 valid on non-LSF cluster systems.*
@@ -364,24 +377,25 @@ Please refer to [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 <!--Link References-->
 
-[leandro]: https://github.com/leoisl
-[snakemake_params]: https://snakemake.readthedocs.io/en/stable/executable.html#all-options
-[profile]: https://snakemake.readthedocs.io/en/stable/executable.html#profiles
-[lsf]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_welcome/lsf_welcome.html
-[cookiecutter-repo]: https://github.com/audreyr/cookiecutter
-[cc-install]: https://cookiecutter.readthedocs.io/en/1.7.0/installation.html
 [1]: https://snakemake.readthedocs.io/en/stable/executing/cluster-cloud.html#cluster-execution
-[bsub-o]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.o.1.html
-[bsub-e]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.e.1.html
+[18]: https://github.com/Snakemake-Profiles/lsf/issues/18
 [bsub-P]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.__p.1.html
 [bsub-W]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.__w.1.html
+[bsub-e]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.e.1.html
 [bsub-gpu]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.gpu.1.html
-[uuid]: https://docs.python.org/3.6/library/uuid.html
+[bsub-o]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.o.1.html
 [bsub-q]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_command_ref/bsub.q.1.html
+[cc-install]: https://cookiecutter.readthedocs.io/en/1.7.0/installation.html
 [config-deprecate]: https://snakemake.readthedocs.io/en/stable/snakefiles/configuration.html#cluster-configuration-deprecated
-[yaml-collections]: https://yaml.org/spec/1.2/spec.html#id2759963
-[status-checker]: https://github.com/Snakemake-Profiles/snakemake-lsf/blob/master/%7B%7Bcookiecutter.profile_name%7D%7D/lsf_status.py
+[cookiecutter-repo]: https://github.com/audreyr/cookiecutter
+[job_kill]: https://www.ibm.com/support/knowledgecenter/SSWRJV_10.1.0/lsf_admin/job_kill_force.html
 [limits]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_config_ref/lsf.conf.lsf_unit_for_limits.5.html
+[lsf]: https://www.ibm.com/support/knowledgecenter/en/SSWRJV_10.1.0/lsf_welcome/lsf_welcome.html
 [lsf-conf]: https://www.ibm.com/support/knowledgecenter/en/SSETD4_9.1.2/lsf_config_ref/lsf.conf.5.html
-[18]: https://github.com/Snakemake-Profiles/snakemake-lsf/issues/18
+[profile]: https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles
+[status-checker]: https://github.com/Snakemake-Profiles/lsf/blob/master/%7B%7Bcookiecutter.profile_name%7D%7D/lsf_status.py
+[uuid]: https://docs.python.org/3.6/library/uuid.html
+[yaml-collections]: https://yaml.org/spec/1.2/spec.html#id2759963
+[leandro]: https://github.com/leoisl
+[snakemake_params]: https://snakemake.readthedocs.io/en/stable/executable.html#all-options
 

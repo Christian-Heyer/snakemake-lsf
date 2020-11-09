@@ -22,3 +22,15 @@ class CookieCutter:
     @staticmethod
     def get_lsf_unit_for_limits() -> str:
         return "{{cookiecutter.LSF_UNIT_FOR_LIMITS}}"
+
+    @staticmethod
+    def get_unknwn_behaviour() -> str:
+        return "{{cookiecutter.UNKWN_behaviour}}"
+
+    @staticmethod
+    def get_zombi_behaviour() -> str:
+        return "{{cookiecutter.ZOMBI_behaviour}}"
+
+    @staticmethod
+    def get_latency_wait() -> float:
+        return float("{{cookiecutter.latency_wait}}")
