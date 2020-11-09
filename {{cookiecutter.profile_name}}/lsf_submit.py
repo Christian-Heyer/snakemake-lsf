@@ -155,6 +155,7 @@ class Submitter:
         return '-o "{out_log}" -e "{err_log}" -J "{jobname}"'.format(
             out_log=self.outlog, err_log=self.errlog, jobname=self.jobname
         )
+    
     @property
     def walltime(self) -> str:
         return self.cluster.get("walltime", "")
